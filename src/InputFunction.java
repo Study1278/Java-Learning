@@ -9,6 +9,8 @@ public class InputFunction {
         System.out.println("You Entered Integer: " +  x);
         float y = sc.nextFloat();
         System.out.println("You Entered Float: " + y);
+        char z = sc.next().charAt(0);
+        System.out.println("You Entered Character: " + z);
     }
 }
 

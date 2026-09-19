@@ -51,28 +51,56 @@ class point{
 
 }
 */
+/*
+class Test{
+    int a;
+    int b;
+}
+class point{
+    public static void main(String[] args){
+    Test T = new Test();
+    T.a = 10;
+    T.b = 20;
 
+    System.out.println(T.a + " " + T.b);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}*/
+/*
+class test{
+    int a;
+    int b;
+}
+class point{
+    public static void main(String[] args){
+        test T = new test();
+        T.a = 10;
+        T.b = 20;
+        test P = T;
+        P.a = 30;
+        System.out.println(T.a);
+        System.out.println(P.a);
+    }
+}*/
+/*
+class Test{
+    public static void main(String[] args){
+        int x1 = 10;
+        Integer x2 = x1;    // Auto boxing
+        int x3 = x2;          // Auto Unboxing
+        System.out.println(x1);
+        System.out.println(x2);
+        System.out.println(x3);
+    }
+}*/
+/*
+class Test{
+    public static void main(String[] args){
+        int x1 = 400;
+        Integer x2 = 400;
+        if(x1==x2)
+            System.out.println("Same");
+        else
+            System.out.println("Not Same");
+    }
+}*/
