@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Days 25-27 · Java Inheritance, Overriding, instanceof</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6fb;--card:#fff;--ink:#1d1b2e;--mute:#5d5a75;--line:#dcd9ec;--acc:#6b4fd8;--acc2:#e6defc;--ok:#1f8a5b;--bad:#c23b4b;--code:#1d1b2e;--codeink:#e9e5ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}}
+:root[data-theme="dark"]{--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 "Source Serif 4",Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.2;margin:0}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800}
+h2{font-size:26px;margin:48px 0 6px;font-weight:800}
+h3{font-size:19px;margin:26px 0 6px}
+p{margin:8px 0}
+.sub{color:var(--mute);margin-top:6px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:18px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.tip{border-left:4px solid var(--acc);background:var(--acc2);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+pre{background:var(--code);color:var(--codeink);padding:14px;border-radius:10px;overflow-x:auto;font:14px/1.5 "JetBrains Mono",ui-monospace,monospace;margin:12px 0}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85em;background:var(--acc2);padding:1px 5px;border-radius:4px}
+pre code{background:none;padding:0;font-size:inherit}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--acc2)}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+.vid{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--card)}
+.vid:hover,.vid:focus-visible{border-color:var(--acc);outline:none}
+.vid b{font-family:"Bricolage Grotesque",sans-serif;display:block}
+.vid span{color:var(--mute);font-size:15px}
+.time{font:600 13px "JetBrains Mono",monospace;color:var(--acc)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer}
+input[type=checkbox]{width:20px;height:20px;margin-top:4px;accent-color:var(--acc)}
+.q{margin:18px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q p.t{font-weight:600}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:16px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;cursor:pointer}
+.opt:hover{border-color:var(--acc)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.why{font-size:16px;color:var(--mute);display:none;margin-top:4px}
+button.main{font:600 16px "Bricolage Grotesque",sans-serif;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Days 25 to 27: Inheritance, overriding, final and instanceof</h1>
+<p class="sub">Sprint 3 · Oct 08 to Oct 10 · about 2.5 hours per day · Java</p>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<p class="sub" id="barTxt">0 checklist items done</p>
+<h2>Plan</h2>
+<p class="sub">All videos are free on YouTube and open in a new tab. Each link is a search, so pick any recent beginner video with good views and a clear voice.</p>
+<div class="card" id="plan">
+<h3>Day 25 (Thu): extends and super</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">50 min</span> Part 1: single inheritance with <code>extends</code>, Animal and Dog lab</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">50 min</span> Part 2: the <code>super</code> keyword (constructor and method)</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">30 min</span> Quiz questions 1 to 5, then revise anything you missed</span></label>
+<h3>Day 26 (Fri): overriding and final</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 3: method overriding and <code>@Override</code></span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 4: <code>final</code> variable, method, class and the compiler error</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Quiz and explain out loud</span></label>
+<h3>Day 27 (Sat): instanceof and hierarchy</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 5: <code>instanceof</code> and safe casting</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">80 min</span> Part 6: build Animal, Dog, GoldenRetriever</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Full quiz and revise weak spots</span></label>
+</div>
+
+<h2 style="margin-top:36px">DAY 25 · Thursday</h2>
+<h2>Part 1. Inheritance with extends</h2>
+<p>Inheritance lets a new class reuse an existing one. The existing class is the <b>parent</b> (superclass). The new class is the <b>child</b> (subclass). The child gets the parent's non-private fields and methods automatically, and can add its own. Use it when the sentence "Dog <i>is an</i> Animal" makes sense.</p>
+<pre><code>class Animal {
+    String name = "Animal";
+    void makeSound() {
+        System.out.println("Some sound");
+    }
+}
+
+class Dog extends Animal {
+    void fetch() {                 // only Dog has this
+        System.out.println(name + " fetches");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.makeSound();   // inherited from Animal
+        d.fetch();       // Dog's own
+    }
+}</code></pre>
+<div class="tip"><b>Remember:</b> private members are <i>not</i> inherited for direct use (the child cannot write <code>name</code> if it is private, it must use a getter). Java allows only <b>one</b> parent class per class (single inheritance), but a chain is fine.</div>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+inheritance+extends+tutorial+for+beginners">
+<b>Video: Inheritance in Java for beginners</b>
+<span>Watch first. Look for the Animal and Dog style example.</span></a>
+
+<h3>Lab</h3>
+<p>Type the code above. Then add a field <code>int age</code> to Animal and print it from a Dog object. Then make <code>name</code> private and see the compile error, and fix it with a getter.</p>
+
+<h2>Part 2. The super keyword</h2>
+<p><code>super</code> means "the parent part of this object". Two uses:</p>
+<h3>Use 1: super(...) calls the parent constructor</h3>
+<p>When you create a Dog, the Animal part is built first. If the parent has a constructor with parameters, the child must call it, and <code>super(...)</code> must be the <b>first line</b>.</p>
+<pre><code>class Animal {
+    String name;
+    Animal(String name) {
+        this.name = name;
+        System.out.println("Animal constructor");
+    }
+}
+class Dog extends Animal {
+    Dog(String name) {
+        super(name);               // first line
+        System.out.println("Dog constructor");
+    }
+}
+// new Dog("Bruno") prints:
+// Animal constructor
+// Dog constructor</code></pre>
+<div class="tip"><b>Trap:</b> if you write no <code>super(...)</code>, Java adds <code>super()</code> for you. If Animal has no no-argument constructor, you get a compile error. Fix: call <code>super(name)</code> yourself.</div>
+<h3>Use 2: super.method() calls the parent's version</h3>
+<pre><code>class Dog extends Animal {
+    void makeSound() {
+        super.makeSound();          // Some sound
+        System.out.println("Woof"); // then add more
+    }
+}</code></pre>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+super+keyword+explained+constructor+and+method">
+<b>Video: The super keyword in Java</b>
+<span>Look for one covering both super() and super.method().</span></a>
+
+<h2 style="margin-top:56px">DAY 26 · Friday</h2>
+<h2>Part 3. Method overriding and @Override</h2>
+<p>Overriding means a child class gives its <b>own version</b> of a method the parent already has. Same method name, same parameters.</p>
+<pre><code>class Animal {
+    void makeSound() { System.out.println("Some sound"); }
+}
+class Dog extends Animal {
+    @Override
+    void makeSound() { System.out.println("Woof"); }
+}
+class Cat extends Animal {
+    @Override
+    void makeSound() { System.out.println("Meow"); }
+}
+
+Animal a = new Dog();
+a.makeSound();    // Woof  (runtime decides, based on the real object)</code></pre>
+<p>That last line is the heart of polymorphism: the variable type is Animal, but Java runs the version from the <b>actual object</b> (Dog).</p>
+<h3>Rules for overriding</h3>
+<ul>
+<li>Same name and same parameter list as the parent method.</li>
+<li>Return type must be the same (or a subtype of it).</li>
+<li>Access cannot be more restrictive: a public parent method cannot become private in the child.</li>
+<li>You cannot override <code>private</code>, <code>static</code> or <code>final</code> methods.</li>
+</ul>
+<h3>Why always write @Override</h3>
+<pre><code>class Dog extends Animal {
+    void makeSond() { ... }   // typo: silently creates a NEW method
+    @Override
+    void makeSond() { ... }   // compile error: nothing to override. Typo caught!
+}</code></pre>
+<div class="wrap"><table>
+<tr><th></th><th>Overloading</th><th>Overriding</th></tr>
+<tr><td>Where</td><td>Same class</td><td>Parent and child</td></tr>
+<tr><td>Parameters</td><td>Must differ</td><td>Must be the same</td></tr>
+<tr><td>Decided</td><td>At compile time</td><td>At runtime</td></tr>
+</table></div>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+method+overriding+override+annotation+explained+beginners">
+<b>Video: Method overriding in Java</b>
+<span>Look for one that shows Animal a = new Dog() and the output.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+overloading+vs+overriding+difference+beginners">
+<b>Video: Overloading vs overriding</b>
+<span>Beginners mix these up a lot. Worth 10 minutes.</span></a>
+
+<h2>Part 4. The final keyword</h2>
+<p><code>final</code> means "cannot be changed". It works in three places:</p>
+<div class="wrap"><table>
+<tr><th>On a</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>variable</td><td>Value can be set once</td><td><code>final int MAX = 10;</code></td></tr>
+<tr><td>method</td><td>Subclasses cannot override it</td><td><code>final void login() {}</code></td></tr>
+<tr><td>class</td><td>Nobody can extend it</td><td><code>final class String</code></td></tr>
+</table></div>
+<h3>Lab: see the compile errors yourself</h3>
+<pre><code>class Animal {
+    final void breathe() { System.out.println("Breathing"); }
+}
+class Dog extends Animal {
+    // @Override
+    // void breathe() { }   // uncomment: error, cannot override final method
+}
+
+final class Cat { }
+// class Kitten extends Cat { }  // uncomment: error, cannot inherit from final</code></pre>
+<p>Why use it? Security and safety. Java's own <code>String</code> is final so nobody can build a subclass that changes how strings behave.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+final+keyword+variable+method+class+explained">
+<b>Video: final keyword in Java</b>
+<span>Look for one that covers all three uses.</span></a>
+
+<h2 style="margin-top:56px">DAY 27 · Saturday</h2>
+<h2>Part 5. The instanceof operator</h2>
+<p>When a variable has the parent type, the real object may be any child. Casting to the wrong child crashes the program with <code>ClassCastException</code>. <code>instanceof</code> checks the real type first and returns true or false.</p>
+<pre><code>Animal animal = new Dog();
+
+if (animal instanceof Dog) {
+    Dog d = (Dog) animal;   // safe cast
+    d.fetch();
+}
+
+Animal other = new Cat();
+Dog bad = (Dog) other;      // crashes: ClassCastException</code></pre>
+<p>Newer Java (16 and above) lets you combine check and cast:</p>
+<pre><code>if (animal instanceof Dog d) {
+    d.fetch();              // d is already a Dog here
+}</code></pre>
+<div class="tip"><b>Good to know:</b> <code>null instanceof Dog</code> is always false, and a GoldenRetriever object is <code>instanceof</code> Dog <i>and</i> Animal, because it is all of them.</div>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+instanceof+operator+casting+ClassCastException+explained">
+<b>Video: instanceof operator and type casting in Java</b>
+<span>Look for one that shows upcasting and downcasting.</span></a>
+
+<h2>Part 6. Build: Animal, Dog, GoldenRetriever</h2>
+<p>Three levels of inheritance. Each level overrides <code>makeSound()</code>, and GoldenRetriever adds its own <code>fetch()</code>.</p>
+<pre><code>class Animal {
+    protected String name;
+    Animal(String name) { this.name = name; }
+    void makeSound() { System.out.println(name + ": some sound"); }
+}
+
+class Dog extends Animal {
+    Dog(String name) { super(name); }
+    @Override
+    void makeSound() { System.out.println(name + ": Woof"); }
+}
+
+class GoldenRetriever extends Dog {
+    GoldenRetriever(String name) { super(name); }
+    @Override
+    void makeSound() {
+        super.makeSound();                       // Dog's Woof first
+        System.out.println(name + ": (friendly bark)");
+    }
+    void fetch() { System.out.println(name + " fetches the ball"); }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal[] zoo = {
+            new Animal("Generic"),
+            new Dog("Bruno"),
+            new GoldenRetriever("Goldie")
+        };
+        for (Animal a : zoo) {
+            a.makeSound();                       // runtime picks the version
+            if (a instanceof GoldenRetriever g) {
+                g.fetch();                       // only for this type
+            }
+        }
+    }
+}</code></pre>
+<h3>Predict first, then run</h3>
+<details><summary>Show expected output</summary>
+<pre><code>Generic: some sound
+Bruno: Woof
+Goldie: Woof
+Goldie: (friendly bark)
+Goldie fetches the ball</code></pre></details>
+<p><b>Extra practice:</b> add a <code>final String getName()</code> method to <code>Animal</code> and try to override it in Dog, add a <code>Cat</code> class, and print "is a Dog" or "is not a Dog" for each animal using <code>instanceof</code>.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+multilevel+inheritance+example+explained+beginners">
+<b>Video: Multilevel inheritance in Java</b>
+<span>Use it to compare with your own hierarchy after you build it.</span></a>
+
+<h2>Quiz: 16 questions across all three days</h2>
+<div id="quiz"></div>
+<p><button class="main" id="reset">Reset quiz</button> <span id="score" class="sub"></span></p>
+<h2>Finish line</h2>
+<div class="card"><p>You are done when you can, without looking:</p><ul>
+<li>Write a child class with <code>extends</code> and call the parent constructor with <code>super(...)</code>.</li>
+<li>Explain why <code>Animal a = new Dog(); a.makeSound();</code> prints Woof.</li>
+<li>List what <code>final</code> blocks on a variable, a method and a class.</li>
+<li>Use <code>instanceof</code> to avoid a ClassCastException.</li></ul></div>
+</main>
+<script>
+var Q=[
+["Which keyword makes Dog a child of Animal?",["implements","extends","inherits","super"],1,"class Dog extends Animal."],
+["Can a Java class extend two classes?",["Yes, any number","Yes, up to two","No, only one parent class","Only abstract classes"],2,"Java classes have a single parent."],
+["A parent has Animal(String name) only. The child constructor has no super call. Result?",["Works","Compile error","Runtime error","Name is null"],1,"Java inserts super(), which does not exist. Call super(name)."],
+["Where must super(...) appear in a constructor?",["Last line","First line","Anywhere","Not allowed"],1,"It must be the first statement."],
+["What does super.makeSound() do inside Dog?",["Calls Dog's version","Calls Animal's version","Creates a new Animal","Nothing"],1,"super refers to the parent part of the object."],
+["What makes a valid override of void makeSound()?",["int makeSound()","void makeSound(int x)","@Override void makeSound()","static void makeSound()"],2,"Same name, same parameters, same return type."],
+["Why use @Override?",["It runs faster","The compiler catches typos in the method name","It is required","It makes the method final"],1,"A typo becomes a compile error."],
+["Animal a = new Dog(); a.makeSound(); runs which version?",["Animal's","Dog's","Both","Compile error"],1,"The actual object decides at runtime."],
+["Which method can NOT be overridden?",["public","protected","final","default"],2,"final methods are locked."],
+["What happens with class Kitten extends Cat when Cat is final?",["Works","Compile error","Runtime error","Warning only"],1,"A final class cannot be extended."],
+["What does final int MAX = 10; mean?",["MAX can be reassigned","MAX cannot be reassigned","MAX is static","MAX is private"],1,"A final variable can be assigned only once."],
+["What does instanceof return?",["The class name","true or false","The object","A number"],1,"It is a boolean check on the actual type."],
+["Animal x = new Cat(); Dog d = (Dog) x; What happens?",["Works","Compile error","ClassCastException at runtime","d is null"],2,"The real object is a Cat, so the cast fails at runtime."],
+["A GoldenRetriever object: goldie instanceof Animal is...",["false","true","Compile error","null"],1,"It is a Dog and an Animal through inheritance."],
+["null instanceof Dog is...",["true","false","NullPointerException","Compile error"],1,"instanceof is always false for null."],
+["Why can't Animal a call a.fetch() when fetch exists only in Dog?",["fetch is private","The reference type Animal has no fetch","It needs super","Java bug"],1,"The compiler checks the variable type. Cast to Dog first."]
+];
+var quiz=document.getElementById("quiz"),done=0,right=0;
+function build(){
+quiz.innerHTML="";done=0;right=0;document.getElementById("score").textContent="";
+Q.forEach(function(q,i){
+var d=document.createElement("div");d.className="q";
+var t=document.createElement("p");t.className="t";t.textContent=(i+1)+". "+q[0];d.appendChild(t);
+var w=document.createElement("p");w.className="why";
+q[1].forEach(function(o,j){
+var b=document.createElement("button");b.className="opt";b.textContent=o;
+b.onclick=function(){
+if(d.dataset.a)return;d.dataset.a=1;done++;
+var bs=d.querySelectorAll(".opt");
+bs[q[2]].classList.add("right");
+if(j===q[2])right++;else b.classList.add("wrong");
+w.textContent=q[3];w.style.display="block";
+if(done===Q.length)document.getElementById("score").textContent="Score: "+right+" / "+Q.length+(right===Q.length?" Perfect.":" Review the parts you missed.");
+};
+d.appendChild(b);
+});
+d.appendChild(w);quiz.appendChild(d);
+});}
+build();
+document.getElementById("reset").onclick=build;
+var boxes=document.querySelectorAll("#plan input"),key="days25-27-plan";
+function upd(){
+var n=0;boxes.forEach(function(b){if(b.checked)n++});
+document.getElementById("bar").style.width=(n/boxes.length*100)+"%";
+document.getElementById("barTxt").textContent=n+" of "+boxes.length+" checklist items done";
+try{localStorage.setItem(key,JSON.stringify(Array.from(boxes).map(function(b){return b.checked})))}catch(e){}
+}
+try{var s=JSON.parse(localStorage.getItem(key)||"null");if(s)boxes.forEach(function(b,i){b.checked=!!s[i]})}catch(e){}
+boxes.forEach(function(b){b.addEventListener("change",upd)});
+upd();
+</script>
+</body>
+</html>

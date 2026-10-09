@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Days 22-24 · Java Classes, Constructors, static, BankAccount</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6fb;--card:#fff;--ink:#1d1b2e;--mute:#5d5a75;--line:#dcd9ec;--acc:#6b4fd8;--acc2:#e6defc;--ok:#1f8a5b;--bad:#c23b4b;--code:#1d1b2e;--codeink:#e9e5ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}}
+:root[data-theme="dark"]{--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 "Source Serif 4",Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.2;margin:0}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800}
+h2{font-size:26px;margin:48px 0 6px;font-weight:800}
+h3{font-size:19px;margin:26px 0 6px}
+p{margin:8px 0}
+.sub{color:var(--mute);margin-top:6px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:18px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.tip{border-left:4px solid var(--acc);background:var(--acc2);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+pre{background:var(--code);color:var(--codeink);padding:14px;border-radius:10px;overflow-x:auto;font:14px/1.5 "JetBrains Mono",ui-monospace,monospace;margin:12px 0}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85em;background:var(--acc2);padding:1px 5px;border-radius:4px}
+pre code{background:none;padding:0;font-size:inherit}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--acc2)}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+.vid{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--card)}
+.vid:hover,.vid:focus-visible{border-color:var(--acc);outline:none}
+.vid b{font-family:"Bricolage Grotesque",sans-serif;display:block}
+.vid span{color:var(--mute);font-size:15px}
+.time{font:600 13px "JetBrains Mono",monospace;color:var(--acc)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer}
+input[type=checkbox]{width:20px;height:20px;margin-top:4px;accent-color:var(--acc)}
+.q{margin:18px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q p.t{font-weight:600}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:16px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;cursor:pointer}
+.opt:hover{border-color:var(--acc)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.why{font-size:16px;color:var(--mute);display:none;margin-top:4px}
+button.main{font:600 16px "Bricolage Grotesque",sans-serif;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Days 22 to 24: Classes, constructors, static and BankAccount</h1>
+<p class="sub">Sprint 3 · Oct 05 to Oct 07 · about 2.5 hours per day · Java</p>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<p class="sub" id="barTxt">0 of 7 checklist items done</p>
+
+<h2>Today's plan</h2>
+<p class="sub">All videos are free on YouTube and open in a new tab. Each link is a search, so pick any recent beginner video with good views and a clear voice. Playing 1.25x speed is fine.</p>
+<div class="card" id="plan">
+<h3>Day 22 (Mon): class declaration and object creation</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Parts 1 and 2: classes and access modifiers, with videos</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 3: BankAccount access lab in 3 places</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Parts 4 and 5: <code>new</code>, stack and heap, draw the diagram</span></label>
+<h3>Day 23 (Tue): constructors and this</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 6: default, parameterized and overloaded constructors</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 7: the <code>this</code> keyword and constructor chaining</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">30 min</span> Student lab: predict which constructor runs</span></label>
+<h3>Day 24 (Wed): static and the complete BankAccount</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 8: static fields, methods and static block</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 9: build the complete BankAccount class</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Take the full quiz and explain each day out loud</span></label>
+</div>
+<h2 style="margin-top:36px">DAY 22 · Monday</h2>
+<h2>Part 1. What is a class?</h2>
+<p>A class is a blueprint. An object is a real thing built from that blueprint. A class has two kinds of members:</p>
+<ul>
+<li><b>Fields</b>: variables that store data (what the object <i>has</i>).</li>
+<li><b>Methods</b>: functions that do work (what the object <i>does</i>).</li>
+</ul>
+<pre><code>public class Student {
+    String name;          // field
+    int age;              // field
+
+    void introduce() {    // method
+        System.out.println("Hi, I am " + name);
+    }
+}</code></pre>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+classes+and+objects+tutorial+for+beginners">
+<b>Video: Java classes and objects, full beginner intro</b>
+<span>Search results open in a new tab. Good picks: Bro Code, Telusko, Programming with Mosh. Watch one short video, 15 minutes or less.</span></a>
+
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+class+fields+and+methods+for+beginners">
+<b>Video: Variables vs methods inside a class (beginner)</b>
+<span>Watch this if "field" and "method" feel confusing. 10 minutes is enough.</span></a>
+<h2>Part 2. Access modifiers</h2>
+<div class="tip"><b>Beginner picture:</b> imagine a house. <code>private</code> is your bedroom (only you). Default is the family area (people living in the same house, the package). <code>protected</code> is the family area plus your children who moved out (subclasses). <code>public</code> is the front garden (everyone).</div>
+<p>An access modifier decides who may use a field or method. Think of it as a door lock.</p>
+<div class="wrap"><table>
+<tr><th>Modifier</th><th>Same class</th><th>Same package</th><th>Subclass (other package)</th><th>Everyone else</th></tr>
+<tr><td><code>public</code></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td><code>protected</code></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td></tr>
+<tr><td>default (nothing)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+<tr><td><code>private</code></td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+</table></div>
+<div class="tip"><b>Rule of thumb:</b> make fields <code>private</code> and give access through <code>public</code> methods (getters and setters). This is called encapsulation, and you will see it in every Java project.</div>
+
+<h3>Videos for this topic (watch in this order)</h3>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+access+modifiers+public+private+protected+default+explained+with+animation">
+<b>Video: Access modifiers explained with animation</b>
+<span>Start here. It shows the 4 levels visually. Titles to look for: "Access Modifiers in Java - Theory (Explained with animation)".</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+access+modifiers+tutorial+public+private+protected+beginners">
+<b>Video: Access modifiers with code examples</b>
+<span>Watch second to see compile errors happen live. Titles to look for: "Java access modifiers: (public, protected, private)".</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+getters+and+setters+encapsulation+for+beginners">
+<b>Video: Getters and setters, encapsulation</b>
+<span>Explains why fields are private with public methods. 10 to 15 minutes.</span></a>
+<h2>Part 3. Lab: BankAccount</h2>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+packages+tutorial+create+and+import+for+beginners">
+<b>Video: Packages in Java (how to create and import)</b>
+<span>Needed for the lab, because the 3 test files use different packages.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+javac+command+line+compile+and+run+packages">
+<b>Video: Compile and run Java from the command line</b>
+<span>Needed if you are not using an IDE. In IntelliJ or VS Code you can skip this one.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+inheritance+extends+tutorial+for+beginners">
+<b>Video: Inheritance with extends (only for the optional protected test)</b>
+<span>Skip this today if you have not studied inheritance yet. Just run the optional block as a preview.</span></a>
+
+<h3>Step 1: create this file</h3>
+<p>Path: <code>com/demo/BankAccount.java</code></p>
+<pre><code>package com.demo;
+
+public class BankAccount {
+    public String bankName = "ABC Bank";
+    private double balance = 0;
+    protected String accountType = "Savings";
+    String branch = "Main";            // default access
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+    public double getBalance() {
+        return balance;
+    }
+    private void audit() {
+        System.out.println("Internal check");
+    }
+}</code></pre>
+<h3>Step 2: test from the same package</h3>
+<p>Create <code>com/demo/SamePackageTest.java</code>:</p>
+<pre><code>package com.demo;
+
+public class SamePackageTest {
+    public static void main(String[] args) {
+        BankAccount acc = new BankAccount();
+        System.out.println(acc.bankName);
+        System.out.println(acc.accountType);
+        System.out.println(acc.branch);
+        // System.out.println(acc.balance);  // try uncommenting
+        // acc.audit();                      // try uncommenting
+    }
+}</code></pre>
+<h3>Step 3: test from a different package</h3>
+<p>Create <code>com/other/OutsideTest.java</code>:</p>
+<pre><code>package com.other;
+import com.demo.BankAccount;
+
+public class OutsideTest {
+    public static void main(String[] args) {
+        BankAccount acc = new BankAccount();
+        System.out.println(acc.bankName);     // works
+        // System.out.println(acc.accountType); // protected
+        // System.out.println(acc.branch);      // default
+        // System.out.println(acc.balance);     // private
+        acc.deposit(500);
+        System.out.println(acc.getBalance());  // works
+    }
+}</code></pre>
+<div class="tip"><b>Do this before compiling:</b> for every commented line, write "works" or "fails" on paper. Then uncomment each one and check. Every wrong guess is where you learn the most.</div>
+<details><summary>Optional: test protected with a subclass</summary>
+<pre><code>package com.other;
+import com.demo.BankAccount;
+
+public class Savings extends BankAccount {
+    void show() {
+        System.out.println(accountType);  // works: inherited
+        BankAccount b = new BankAccount();
+        // System.out.println(b.accountType); // fails: not through a BankAccount reference
+    }
+}</code></pre></details>
+<p>Run from the folder above <code>com</code>: <code>javac com/demo/*.java com/other/*.java</code> then <code>java com.other.OutsideTest</code></p>
+
+<h2>Part 4. Object creation with <code>new</code></h2>
+<p>Take this one line: <code>BankAccount acc = new BankAccount();</code></p>
+<ol>
+<li><code>new</code> reserves memory on the <b>heap</b> for a BankAccount object.</li>
+<li>The fields get their starting values.</li>
+<li><code>new</code> returns a <b>reference</b> (like an address) to that object.</li>
+<li>The variable <code>acc</code> lives on the <b>stack</b> and stores the reference, not the object.</li>
+</ol>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+stack+and+heap+memory+explained+new+keyword">
+<b>Video: Java stack vs heap memory</b>
+<span>Search results open in a new tab. Pick a video that draws the diagram while explaining. Watch 10 to 15 minutes.</span></a>
+
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+new+keyword+object+creation+explained+beginners">
+<b>Video: The new keyword and constructors in simple words</b>
+<span>Short and simple. Watch before Video 2.</span></a>
+<h2>Part 5. Draw it on paper</h2>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+object+reference+variables+copy+reference+vs+object">
+<b>Video: References: why two variables can point to one object</b>
+<span>This explains the <code>b = a</code> example. Pause and draw as the video draws.</span></a>
+
+<pre><code>   STACK                     HEAP
+ +--------+            +-------------------+
+ | acc  --+----------->| BankAccount       |
+ +--------+            | bankName = "ABC"  |
+                       | balance  = 0.0    |
+                       +-------------------+</code></pre>
+<p>Now draw the diagram for these lines yourself, then check the answer below:</p>
+<pre><code>BankAccount a = new BankAccount();
+BankAccount b = a;
+b.deposit(500);
+BankAccount c = new BankAccount();
+System.out.println(a.getBalance());</code></pre>
+<details><summary>Show the answer</summary>
+<p><code>a</code> and <code>b</code> are two arrows pointing at the <b>same</b> object, so <code>b.deposit(500)</code> changes what <code>a</code> sees. It prints <code>500.0</code>. <code>c</code> points at a second, separate object with balance 0.</p></details>
+
+<h2 style="margin-top:56px">DAY 23 · Tuesday</h2>
+<h2>Part 6. Constructors</h2>
+<p>A constructor is a special method that runs automatically when you write <code>new</code>. Its job is to set up the object's starting values. Rules: it has the <b>same name as the class</b> and <b>no return type</b> (not even void).</p>
+<h3>1. Default constructor</h3>
+<p>If you write no constructor, Java quietly adds an empty one for you. That is why <code>new Student()</code> worked before you ever wrote a constructor.</p>
+<div class="tip"><b>Trap:</b> the moment you write <i>any</i> constructor yourself, Java stops adding the free one. Then <code>new Student()</code> fails unless you write it too.</div>
+<h3>2. Parameterized constructor</h3>
+<pre><code>public class Student {
+    String name;
+    int age;
+
+    Student(String n, int a) {   // takes values
+        name = n;
+        age = a;
+    }
+}
+// Student s = new Student("Ravi", 20);</code></pre>
+<h3>3. Overloading constructors</h3>
+<p>You can write several constructors in one class as long as their parameter lists differ (different count or types). Java picks the one that matches the call.</p>
+<pre><code>Student()                  { name = "Unknown"; age = 0; }
+Student(String n)          { name = n; age = 0; }
+Student(String n, int a)   { name = n; age = a; }
+
+new Student();             // calls the first
+new Student("Ravi");       // calls the second
+new Student("Ravi", 20);   // calls the third</code></pre>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+constructors+tutorial+for+beginners+default+parameterized">
+<b>Video: Constructors in Java for beginners</b>
+<span>Watch first. Look for one that shows the default constructor and the parameterized one.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+constructor+overloading+explained+with+example">
+<b>Video: Constructor overloading</b>
+<span>Shows how Java chooses which constructor to run.</span></a>
+
+<h2>Part 7. The this keyword</h2>
+<p><code>this</code> means "the current object". You use it two ways.</p>
+<h3>Use 1: separate a field from a parameter with the same name</h3>
+<pre><code>Student(String name, int age) {
+    this.name = name;   // left: the field, right: the parameter
+    this.age = age;
+}</code></pre>
+<p>Without <code>this</code>, <code>name = name</code> just assigns the parameter to itself and the field stays empty. This is the most common beginner bug.</p>
+<h3>Use 2: call one constructor from another</h3>
+<pre><code>Student(String name) {
+    this(name, 0);       // must be the FIRST line
+}
+Student(String name, int age) {
+    this.name = name;
+    this.age = age;
+}</code></pre>
+<p>This avoids copying the same code into every constructor.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+this+keyword+explained+for+beginners">
+<b>Video: The this keyword in Java</b>
+<span>Look for one that covers both this.name and this(...).</span></a>
+
+<h3>Lab: Student</h3>
+<p>Write a Student class with the three constructors above, using <code>this</code>. Add a method <code>show()</code> that prints name and age. Add a <code>System.out.println("3-arg constructor")</code> line inside each constructor, then create 3 objects and <b>predict the printed lines before running</b>.</p>
+<details><summary>Show a solution</summary>
+<pre><code>public class Student {
+    private String name;
+    private int age;
+
+    Student() { this("Unknown", 0); }
+    Student(String name) { this(name, 0); }
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+        System.out.println("3-arg constructor");
+    }
+    void show() { System.out.println(name + " " + age); }
+
+    public static void main(String[] args) {
+        new Student().show();            // Unknown 0
+        new Student("Ravi").show();      // Ravi 0
+        new Student("Asha", 21).show();  // Asha 21
+    }
+}</code></pre>
+<p>Note that "3-arg constructor" prints 3 times, because the shorter constructors all end up calling it.</p></details>
+
+<h2 style="margin-top:56px">DAY 24 · Wednesday</h2>
+<h2>Part 8. The static keyword</h2>
+<p>Normal fields belong to each object. A <b>static</b> member belongs to the <b>class itself</b>, and every object shares the same one.</p>
+<h3>Static field: one copy shared by all</h3>
+<pre><code>class Student {
+    static int count = 0;   // shared
+    String name;            // one per object
+
+    Student(String name) {
+        this.name = name;
+        count++;            // every new object adds 1
+    }
+}
+new Student("A"); new Student("B");
+System.out.println(Student.count);  // 2</code></pre>
+<p>Call static members with the class name: <code>Student.count</code>.</p>
+<h3>Static method</h3>
+<p>Runs without creating an object, like <code>Math.sqrt(9)</code>. Rule: a static method cannot use non-static fields directly, because there may be no object at all.</p>
+<pre><code>static int getCount() { return count; }   // fine
+// static void bad() { System.out.println(name); }  // error: no object</code></pre>
+<h3>Static block</h3>
+<p>Runs <b>once</b>, when the class is first loaded. That happens before any object is created and before the body of <code>main</code> runs.</p>
+<pre><code>class Demo {
+    static { System.out.println("Class loaded"); }
+    public static void main(String[] args) {
+        System.out.println("main runs");
+    }
+}
+// Output:
+// Class loaded
+// main runs</code></pre>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+static+keyword+variables+methods+static+block+beginners">
+<b>Video: static keyword in Java</b>
+<span>Look for one that covers all three: field, method, block.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+static+vs+non+static+members+difference">
+<b>Video: Static vs non-static</b>
+<span>Helps with the "why can static not use name" error.</span></a>
+
+<h2>Part 9. Build the complete BankAccount</h2>
+<p>Requirements from your plan: fields <code>accountNumber</code> and <code>balance</code>; methods <code>deposit(amount)</code>, <code>withdraw(amount)</code> with an insufficient funds check, and <code>getBalance()</code>. This class is the base for Sprint 4 (exception handling), so keep it clean. This combines all three days: private fields, constructor with <code>this</code>, and a static counter.</p>
+<pre><code>public class BankAccount {
+    private static int totalAccounts = 0;
+    private String accountNumber;
+    private double balance;
+
+    static { System.out.println("BankAccount class loaded"); }
+
+    public BankAccount(String accountNumber, double balance) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        totalAccounts++;
+    }
+    public BankAccount(String accountNumber) {
+        this(accountNumber, 0);
+    }
+
+    public void deposit(double amount) {
+        if (amount &lt;= 0) {
+            System.out.println("Deposit must be positive");
+            return;
+        }
+        balance += amount;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount &lt;= 0) {
+            System.out.println("Withdraw must be positive");
+            return false;
+        }
+        if (amount &gt; balance) {
+            System.out.println("Insufficient funds");
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+
+    public double getBalance() { return balance; }
+    public String getAccountNumber() { return accountNumber; }
+    public static int getTotalAccounts() { return totalAccounts; }
+}</code></pre>
+<h3>Test it</h3>
+<pre><code>public class Main {
+    public static void main(String[] args) {
+        BankAccount a = new BankAccount("A101", 1000);
+        BankAccount b = new BankAccount("B202");
+        a.deposit(500);
+        a.withdraw(2000);                       // Insufficient funds
+        a.withdraw(300);
+        System.out.println(a.getBalance());     // 1200.0
+        System.out.println(b.getBalance());     // 0.0
+        System.out.println(BankAccount.getTotalAccounts()); // 2
+    }
+}</code></pre>
+<div class="tip"><b>Why check for insufficient funds:</b> without the check, a withdraw could make the balance negative. Right now we print a message and return false. In Sprint 4 you will replace this with an exception.</div>
+<p><b>Extra practice:</b> add a <code>transfer(BankAccount to, double amount)</code> method that withdraws from this account and deposits into the other only if the withdraw worked.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+bank+account+class+deposit+withdraw+project+for+beginners">
+<b>Video: Build a simple bank account class in Java</b>
+<span>Use it only to compare with your own version after you try yourself.</span></a>
+
+<h2>Quiz: 16 questions across all three days</h2>
+<div id="quiz"></div>
+<p><button class="main" id="reset">Reset quiz</button> <span id="score" class="sub"></span></p>
+
+<h2>Finish line</h2>
+<div class="card">
+<p>You are done when you can, without looking:</p>
+<ul>
+<li>Say what each of the 4 access levels allows.</li>
+<li>Predict a compile error before running.</li>
+<li>Draw stack and heap for any <code>new</code> line.</li>
+<li>Explain why <code>b = a</code> does not copy the object.</li>
+</ul>
+<p>Tomorrow: constructors, so <code>new BankAccount("ABC", 1000)</code> sets values at creation.</p>
+</div>
+</main>
+<script>
+var Q=[
+["Which modifier allows access only inside the same class?",["public","private","protected","default"],1,"private is the strictest level."],
+["A field with no modifier can be used from...",["Anywhere","Same package only","Subclasses anywhere","Same class only"],1,"Default (package-private) access stops at the package boundary."],
+["Which can a subclass in a different package use?",["private field","default field","protected field","none of these"],2,"protected adds subclass access across packages."],
+["Where does the object created by new live?",["Stack","Heap","Register","Method area only"],1,"Objects always live on the heap."],
+["What does the variable acc store in 'BankAccount acc = new BankAccount();'?",["The whole object","A copy of the object","A reference to the object","The class name"],2,"The stack variable holds a reference, like an address."],
+["After 'BankAccount b = a;' how many objects exist?",["0","1","2","It depends"],1,"Only the reference was copied. One object, two references."],
+["Why make fields private and add getters?",["It runs faster","Java requires it","To control how data is read and changed","To save memory"],2,"This is encapsulation: the class guards its own data."],
+["Does this compile outside the class? acc.balance (balance is private)",["Yes","No, compile error","Only with import","Only at runtime"],1,"The compiler rejects access to private members from outside."],
+["What is true about a constructor?",["It has a return type void","It has the same name as the class and no return type","It must be static","It runs only when called by name"],1,"Constructors share the class name and have no return type."],
+["You write only Student(String n). What happens to new Student()?",["Works, Java adds default","Compile error","Works, name is null","Runs the static block"],1,"Writing any constructor removes the free default one."],
+["Constructor overloading means...",["Two classes with one constructor","Same name, different parameter lists","Calling a constructor twice","Using static constructors"],1,"Java chooses by the number and types of arguments."],
+["In Student(String name){ name = name; } what is the bug?",["None","The field is never set, need this.name = name","It needs static","It needs return"],1,"Without this, the parameter is assigned to itself."],
+["Where must this(...) appear inside a constructor?",["Last line","Anywhere","First line","Inside a loop"],2,"A constructor call with this(...) must be the first statement."],
+["Student.count is static and 3 objects exist. How many copies of count exist?",["3","1","0","Depends on objects"],1,"A static field has one copy shared by the whole class."],
+["When does a static block run?",["Every time an object is created","Once, when the class is first loaded","Only when called","Never"],1,"It runs once at class loading."],
+["Why does a static method fail when using a non-static field name directly?",["Fields are private","A static method may run with no object","name is final","Java bug"],1,"There may be no object, so there is no name to read."]
+];
+var quiz=document.getElementById("quiz"),done=0,right=0;
+function build(){
+quiz.innerHTML="";done=0;right=0;document.getElementById("score").textContent="";
+Q.forEach(function(q,i){
+var d=document.createElement("div");d.className="q";
+var t=document.createElement("p");t.className="t";t.textContent=(i+1)+". "+q[0];d.appendChild(t);
+var w=document.createElement("p");w.className="why";
+q[1].forEach(function(o,j){
+var b=document.createElement("button");b.className="opt";b.textContent=o;
+b.onclick=function(){
+if(d.dataset.a)return;d.dataset.a=1;done++;
+var bs=d.querySelectorAll(".opt");
+bs[q[2]].classList.add("right");
+if(j===q[2])right++;else b.classList.add("wrong");
+w.textContent=q[3];w.style.display="block";
+if(done===Q.length)document.getElementById("score").textContent="Score: "+right+" / "+Q.length+(right===Q.length?" Perfect.":" Review the parts you missed.");
+};
+d.appendChild(b);
+});
+d.appendChild(w);quiz.appendChild(d);
+});}
+build();
+document.getElementById("reset").onclick=build;
+var boxes=document.querySelectorAll("#plan input"),key="days22-24-plan";
+function upd(){
+var n=0;boxes.forEach(function(b){if(b.checked)n++});
+document.getElementById("bar").style.width=(n/boxes.length*100)+"%";
+document.getElementById("barTxt").textContent=n+" of "+boxes.length+" checklist items done";
+try{localStorage.setItem(key,JSON.stringify(Array.from(boxes).map(function(b){return b.checked})))}catch(e){}
+}
+try{var s=JSON.parse(localStorage.getItem(key)||"null");if(s)boxes.forEach(function(b,i){b.checked=!!s[i]})}catch(e){}
+boxes.forEach(function(b){b.addEventListener("change",upd)});
+upd();
+</script>
+</body>
+</html>
