@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Days 28-30 · Java Polymorphism, Abstract Classes, Interfaces</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6fb;--card:#fff;--ink:#1d1b2e;--mute:#5d5a75;--line:#dcd9ec;--acc:#6b4fd8;--acc2:#e6defc;--ok:#1f8a5b;--bad:#c23b4b;--code:#1d1b2e;--codeink:#e9e5ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}}
+:root[data-theme="dark"]{--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 "Source Serif 4",Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.2;margin:0}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800}
+h2{font-size:26px;margin:48px 0 6px;font-weight:800}
+h3{font-size:19px;margin:26px 0 6px}
+p{margin:8px 0}
+.sub{color:var(--mute);margin-top:6px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:18px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.tip{border-left:4px solid var(--acc);background:var(--acc2);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+pre{background:var(--code);color:var(--codeink);padding:14px;border-radius:10px;overflow-x:auto;font:14px/1.5 "JetBrains Mono",ui-monospace,monospace;margin:12px 0}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85em;background:var(--acc2);padding:1px 5px;border-radius:4px}
+pre code{background:none;padding:0;font-size:inherit}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--acc2)}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+.vid{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--card)}
+.vid:hover,.vid:focus-visible{border-color:var(--acc);outline:none}
+.vid b{font-family:"Bricolage Grotesque",sans-serif;display:block}
+.vid span{color:var(--mute);font-size:15px}
+.time{font:600 13px "JetBrains Mono",monospace;color:var(--acc)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer}
+input[type=checkbox]{width:20px;height:20px;margin-top:4px;accent-color:var(--acc)}
+.q{margin:18px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q p.t{font-weight:600}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:16px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;cursor:pointer}
+.opt:hover{border-color:var(--acc)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.why{font-size:16px;color:var(--mute);display:none;margin-top:4px}
+button.main{font:600 16px "Bricolage Grotesque",sans-serif;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Days 28 to 30: Polymorphism, abstract classes and interfaces</h1>
+<p class="sub">Sprint 3 · Oct 11 to Oct 13 · about 2.5 hours per day · Java</p>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<p class="sub" id="barTxt">0 checklist items done</p>
+<h2>Plan</h2>
+<p class="sub">All videos are free on YouTube and open in a new tab. Each link is a search, so pick any recent beginner video with good views and a clear voice.</p>
+<div class="card" id="plan">
+<h3>Day 28 (Sun): compile-time and runtime polymorphism</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">50 min</span> Part 1: overloading as compile-time polymorphism</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 2: overriding as runtime polymorphism, the Animal a = new Dog() lab</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">30 min</span> Quiz questions 1 to 5</span></label>
+<h3>Day 29 (Mon): abstract class and interface</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 3: abstract classes and abstract methods, try <code>new</code> on one</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 4: interfaces, <code>implements</code> and default methods</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">30 min</span> Quiz questions 6 to 11</span></label>
+<h3>Day 30 (Tue): comparison and Shape build</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">40 min</span> Part 5: abstract class vs interface, the interview table</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">80 min</span> Part 6: build Shape, Circle, Rectangle, Triangle</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">30 min</span> Full quiz and explain out loud</span></label>
+</div>
+
+<h2 style="margin-top:36px">DAY 28 · Sunday</h2>
+<p><b>Polymorphism</b> means "many forms": one name, different behavior. Java has two kinds, and the difference is <i>when</i> Java decides which method to run.</p>
+<h2>Part 1. Compile-time polymorphism: overloading</h2>
+<p>Several methods share one name but have different parameters. The <b>compiler</b> picks the right one while compiling, using the argument types you pass. You already did this with <code>add()</code> in Sprint 2.</p>
+<pre><code>class Calculator {
+    int add(int a, int b)           { return a + b; }
+    double add(double a, double b)  { return a + b; }
+    int add(int a, int b, int c)    { return a + b + c; }
+}
+
+Calculator c = new Calculator();
+c.add(2, 3);        // int version
+c.add(2.5, 3.5);    // double version
+c.add(1, 2, 3);     // three-parameter version</code></pre>
+<p>Changing only the return type is <b>not</b> overloading and does not compile.</p>
+<div class="tip"><b>Important trap:</b> the compiler uses the <i>variable's type</i>, not the real object.
+<pre><code>static void feed(Animal a) { System.out.println("Animal feed"); }
+static void feed(Dog d)    { System.out.println("Dog feed"); }
+
+Animal x = new Dog();
+feed(x);    // prints "Animal feed", because x is declared as Animal</code></pre></div>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+method+overloading+explained+compile+time+polymorphism">
+<b>Video: Method overloading in Java</b>
+<span>Look for one that calls it compile-time or static polymorphism.</span></a>
+
+<h2>Part 2. Runtime polymorphism: overriding</h2>
+<p>A child class overrides a parent method. When you call it through a parent-typed variable, Java decides <b>at runtime</b> which version runs, based on the <b>actual object</b>, not the variable type.</p>
+<pre><code>class Animal { void makeSound() { System.out.println("Some sound"); } }
+class Dog extends Animal {
+    @Override void makeSound() { System.out.println("Woof"); }
+}
+class Cat extends Animal {
+    @Override void makeSound() { System.out.println("Meow"); }
+}
+
+Animal a = new Dog();
+a.makeSound();      // Woof
+a = new Cat();
+a.makeSound();      // Meow   (same variable, same call, new behavior)</code></pre>
+<div class="wrap"><table>
+<tr><th></th><th>Compile-time</th><th>Runtime</th></tr>
+<tr><td>Also called</td><td>Overloading, static binding</td><td>Overriding, dynamic binding</td></tr>
+<tr><td>Decided by</td><td>Argument types (variable type)</td><td>The actual object type</td></tr>
+<tr><td>Decided</td><td>While compiling</td><td>While running</td></tr>
+</table></div>
+<h3>Lab</h3>
+<p>Create Animal, Dog, Cat as above. Make an array <code>Animal[] zoo = { new Dog(), new Cat(), new Animal() };</code> and loop calling <code>makeSound()</code>. Predict the 3 lines first. Then add the <code>feed</code> trap above and predict again.</p>
+<details><summary>Show expected output</summary><pre><code>Woof
+Meow
+Some sound</code></pre></details>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+runtime+polymorphism+method+overriding+dynamic+method+dispatch">
+<b>Video: Runtime polymorphism in Java</b>
+<span>Look for the Animal a = new Dog() example.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+polymorphism+explained+for+beginners+compile+time+vs+runtime">
+<b>Video: Polymorphism full explanation</b>
+<span>Good to see both kinds side by side.</span></a>
+
+<h2 style="margin-top:56px">DAY 29 · Monday</h2>
+<h2>Part 3. Abstract class and abstract methods</h2>
+<p>An abstract class is an <b>incomplete</b> class. It is a base for children and cannot be created directly. It can hold both regular methods (with a body) and abstract methods (no body, just a promise).</p>
+<pre><code>abstract class Shape {
+    String color = "Red";
+
+    abstract double area();          // no body
+
+    void describe() {                // normal method
+        System.out.println(color + " shape, area " + area());
+    }
+}
+
+class Square extends Shape {
+    double side = 4;
+    @Override
+    double area() { return side * side; }   // must implement
+}
+
+// Shape s = new Shape();   // compile error: Shape is abstract
+Shape s = new Square();     // fine
+s.describe();               // Red shape, area 16.0</code></pre>
+<ul>
+<li>A child must implement <b>all</b> abstract methods, or be declared abstract itself.</li>
+<li>Abstract classes can have constructors, fields and normal methods.</li>
+<li>You cannot combine <code>abstract</code> with <code>final</code> or <code>private</code> on a method.</li>
+</ul>
+<h3>Lab</h3>
+<p>Type <code>new Shape()</code> and read the compiler error. Then remove the <code>area()</code> method from Square and read that error too.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+abstract+class+abstract+method+tutorial+for+beginners">
+<b>Video: Abstract class and abstract methods in Java</b>
+<span>Look for one that shows the compiler error on new.</span></a>
+
+<h2>Part 4. Interface: implements and default methods</h2>
+<p>An interface is a <b>pure contract</b>: a list of methods a class promises to provide. A class signs the contract with <code>implements</code>.</p>
+<pre><code>interface Drawable {
+    void draw();                         // public abstract automatically
+
+    default void show() {                // Java 8+: method with a body
+        System.out.println("Showing...");
+        draw();
+    }
+}
+
+class Circle implements Drawable {
+    @Override
+    public void draw() { System.out.println("Drawing circle"); }
+}
+
+new Circle().show();     // Showing... / Drawing circle</code></pre>
+<ul>
+<li>Methods in an interface are <code>public</code> by default, so the implementing method must be written <code>public</code>.</li>
+<li>Fields in an interface are automatically <code>public static final</code> (constants).</li>
+<li>A class can implement <b>many</b> interfaces: <code>class A implements X, Y</code>.</li>
+<li>A <code>default</code> method gives existing classes new behavior without breaking them. A class may override it.</li>
+</ul>
+<div class="tip"><b>Common error:</b> writing <code>void draw()</code> without <code>public</code> in the class. The compiler says you are trying to assign weaker access privileges.</div>
+<h3>Lab</h3>
+<p>Create the interface and Circle. Remove <code>public</code> from <code>draw()</code> in Circle and read the error. Then add a second default method <code>hide()</code> and call it.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+interface+implements+keyword+tutorial+for+beginners">
+<b>Video: Interfaces in Java</b>
+<span>Watch first. Look for one that also covers default methods.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+8+default+methods+in+interface+explained">
+<b>Video: Default methods in interfaces</b>
+<span>Short video focused on the default keyword.</span></a>
+
+<h2 style="margin-top:56px">DAY 30 · Tuesday</h2>
+<h2>Part 5. Abstract class vs interface</h2>
+<p>This is a very common interview question. Learn the table, then be able to explain each row in your own words.</p>
+<div class="wrap"><table>
+<tr><th></th><th>Abstract class</th><th>Interface</th></tr>
+<tr><td>Keyword</td><td><code>extends</code></td><td><code>implements</code></td></tr>
+<tr><td>How many can a class use</td><td>Only <b>one</b></td><td><b>Many</b></td></tr>
+<tr><td>Constructors</td><td>Yes</td><td>No</td></tr>
+<tr><td>Instance fields (state)</td><td>Yes</td><td>No, only constants</td></tr>
+<tr><td>Method bodies</td><td>Yes, any</td><td>Only default and static</td></tr>
+<tr><td>Method access</td><td>Any</td><td>public</td></tr>
+<tr><td>Meaning</td><td>"is a" with shared code and state</td><td>"can do" ability</td></tr>
+</table></div>
+<div class="tip"><b>How to choose:</b> if the children share fields and code (Circle, Rectangle share a color), use an abstract class. If unrelated classes need the same ability (Bird and Plane can both <code>Flyable</code>), use an interface.</div>
+<p>Two interfaces in one class:</p>
+<pre><code>interface Flyable { void fly(); }
+interface Swimmable { void swim(); }
+class Duck implements Flyable, Swimmable {
+    public void fly()  { System.out.println("Duck flies"); }
+    public void swim() { System.out.println("Duck swims"); }
+}</code></pre>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+abstract+class+vs+interface+difference+interview">
+<b>Video: Abstract class vs interface (interview question)</b>
+<span>Look for one that ends with a comparison table.</span></a>
+
+<h2>Part 6. Build: Shape, Circle, Rectangle, Triangle</h2>
+<p>Shape declares an abstract <code>area()</code>. Each child writes its own formula. Then one array of mixed Shape references shows runtime polymorphism working across all three.</p>
+<pre><code>abstract class Shape {
+    abstract double area();
+}
+
+class Circle extends Shape {
+    double radius;
+    Circle(double radius) { this.radius = radius; }
+    @Override
+    double area() { return Math.PI * radius * radius; }
+}
+
+class Rectangle extends Shape {
+    double width, height;
+    Rectangle(double w, double h) { width = w; height = h; }
+    @Override
+    double area() { return width * height; }
+}
+
+class Triangle extends Shape {
+    double base, height;
+    Triangle(double b, double h) { base = b; height = h; }
+    @Override
+    double area() { return 0.5 * base * height; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Shape[] shapes = {
+            new Circle(3),
+            new Rectangle(4, 5),
+            new Triangle(6, 2)
+        };
+        for (Shape s : shapes) {
+            System.out.println(s.getClass().getSimpleName()
+                + " area = " + s.area());
+        }
+    }
+}</code></pre>
+<details><summary>Show expected output</summary>
+<pre><code>Circle area = 28.274333882308138
+Rectangle area = 20.0
+Triangle area = 6.0</code></pre></details>
+<p>The loop calls <code>s.area()</code> on a Shape variable, yet three different formulas run. Adding a new shape later (say Square) needs no change in the loop.</p>
+<p><b>Extra practice:</b> turn <code>area()</code> into an interface method <code>Measurable</code> and compare. Add a normal method <code>describe()</code> in Shape that prints the area, and call it on each shape. Sum all areas in the loop and print the total.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+abstract+class+shape+circle+rectangle+example+polymorphism">
+<b>Video: Shape abstract class example with Circle, Rectangle</b>
+<span>Use it to compare with your own version after you build it.</span></a>
+
+<h2>Quiz: 16 questions across all three days</h2>
+<div id="quiz"></div>
+<p><button class="main" id="reset">Reset quiz</button> <span id="score" class="sub"></span></p>
+<h2>Finish line</h2>
+<div class="card"><p>You are done when you can, without looking:</p><ul>
+<li>Say which polymorphism is overloading and which is overriding, and who decides each.</li>
+<li>Explain why <code>new Shape()</code> fails when Shape is abstract.</li>
+<li>Write an interface with a default method and implement it.</li>
+<li>Give 4 differences between an abstract class and an interface.</li></ul></div>
+</main>
+<script>
+var Q=[
+["Which is compile-time polymorphism?",["Overriding","Overloading","Inheritance","Casting"],1,"Overloading is resolved by the compiler."],
+["Which is runtime polymorphism?",["Overloading","Overriding","Constructors","static methods"],1,"Overriding is resolved at runtime from the actual object."],
+["What does the compiler use to pick an overloaded method?",["The object's real class","The argument types and variable types","Method order","Return type only"],1,"It looks at the declared types of the arguments."],
+["Animal a = new Dog(); a.makeSound(); Which version runs?",["Animal's","Dog's","Both","Error"],1,"The actual object (Dog) decides at runtime."],
+["feed(Animal) and feed(Dog) exist. Animal x = new Dog(); feed(x); calls...",["feed(Dog)","feed(Animal)","Both","Error"],1,"Overloading uses the variable type, which is Animal."],
+["Can you write Shape s = new Shape(); when Shape is abstract?",["Yes","No, compile error","Only in main","Only with default constructor"],1,"Abstract classes cannot be instantiated."],
+["A child extends an abstract class with one abstract method and does not implement it. Result?",["Works","Compile error unless the child is abstract","Runtime error","Warning"],1,"It must implement it or be abstract itself."],
+["Can an abstract class have a constructor?",["No","Yes","Only if final","Only in interfaces"],1,"Yes, it runs when a child object is created."],
+["A class promises to provide an interface's methods using which keyword?",["extends","implements","inherits","uses"],1,"class Circle implements Drawable."],
+["An interface method draw() is implemented in the class as void draw(). Result?",["Works","Compile error: weaker access, needs public","Runtime error","Works only for default"],1,"Interface methods are public, so the implementation must be public."],
+["What is a default method?",["A method with no body","An interface method with a body (Java 8+)","A private method","A constructor"],1,"default lets an interface provide a ready-made method."],
+["How many abstract classes can a class extend?",["1","2","Any number","0"],0,"Java allows only one parent class."],
+["How many interfaces can a class implement?",["1","2","Many","0"],2,"A class can implement several interfaces."],
+["Which can have instance fields (state)?",["Interface only","Abstract class","Neither","Both equally"],1,"Interfaces hold only constants."],
+["Circle, Rectangle and Triangle in Shape[]. s.area() in a loop is an example of...",["Overloading","Runtime polymorphism","Compile-time polymorphism","Encapsulation"],1,"Each call runs the actual object's version."],
+["Bird and Plane both need a fly() ability but share no parent. Best choice?",["Abstract class","Interface","final class","static class"],1,"Interfaces suit unrelated classes sharing an ability."]
+];
+var quiz=document.getElementById("quiz"),done=0,right=0;
+function build(){
+quiz.innerHTML="";done=0;right=0;document.getElementById("score").textContent="";
+Q.forEach(function(q,i){
+var d=document.createElement("div");d.className="q";
+var t=document.createElement("p");t.className="t";t.textContent=(i+1)+". "+q[0];d.appendChild(t);
+var w=document.createElement("p");w.className="why";
+q[1].forEach(function(o,j){
+var b=document.createElement("button");b.className="opt";b.textContent=o;
+b.onclick=function(){
+if(d.dataset.a)return;d.dataset.a=1;done++;
+var bs=d.querySelectorAll(".opt");
+bs[q[2]].classList.add("right");
+if(j===q[2])right++;else b.classList.add("wrong");
+w.textContent=q[3];w.style.display="block";
+if(done===Q.length)document.getElementById("score").textContent="Score: "+right+" / "+Q.length+(right===Q.length?" Perfect.":" Review the parts you missed.");
+};
+d.appendChild(b);
+});
+d.appendChild(w);quiz.appendChild(d);
+});}
+build();
+document.getElementById("reset").onclick=build;
+var boxes=document.querySelectorAll("#plan input"),key="days28-30-plan";
+function upd(){
+var n=0;boxes.forEach(function(b){if(b.checked)n++});
+document.getElementById("bar").style.width=(n/boxes.length*100)+"%";
+document.getElementById("barTxt").textContent=n+" of "+boxes.length+" checklist items done";
+try{localStorage.setItem(key,JSON.stringify(Array.from(boxes).map(function(b){return b.checked})))}catch(e){}
+}
+try{var s=JSON.parse(localStorage.getItem(key)||"null");if(s)boxes.forEach(function(b,i){b.checked=!!s[i]})}catch(e){}
+boxes.forEach(function(b){b.addEventListener("change",upd)});
+upd();
+</script>
+</body>
+</html>

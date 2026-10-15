@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Days 3-5 · Java Variables, Data Types, Operators</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6fb;--card:#fff;--ink:#1d1b2e;--mute:#5d5a75;--line:#dcd9ec;--acc:#6b4fd8;--acc2:#e6defc;--ok:#1f8a5b;--bad:#c23b4b;--code:#1d1b2e;--codeink:#e9e5ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}}
+:root[data-theme="dark"]{--bg:#0d0d14;--card:#16161f;--ink:#ecebf5;--mute:#9d9bb5;--line:#2a2a3a;--acc:#a48bff;--acc2:#2a2347;--ok:#4cd698;--bad:#ff7a8a;--code:#0a0a10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 "Source Serif 4",Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.2;margin:0}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800}
+h2{font-size:26px;margin:48px 0 6px;font-weight:800}
+h3{font-size:19px;margin:26px 0 6px}
+p{margin:8px 0}
+.sub{color:var(--mute);margin-top:6px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:18px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.tip{border-left:4px solid var(--acc);background:var(--acc2);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+pre{background:var(--code);color:var(--codeink);padding:14px;border-radius:10px;overflow-x:auto;font:14px/1.5 "JetBrains Mono",ui-monospace,monospace;margin:12px 0}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85em;background:var(--acc2);padding:1px 5px;border-radius:4px}
+pre code{background:none;padding:0;font-size:inherit}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--acc2)}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+.vid{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--card)}
+.vid:hover,.vid:focus-visible{border-color:var(--acc);outline:none}
+.vid b{font-family:"Bricolage Grotesque",sans-serif;display:block}
+.vid span{color:var(--mute);font-size:15px}
+.time{font:600 13px "JetBrains Mono",monospace;color:var(--acc)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer}
+input[type=checkbox]{width:20px;height:20px;margin-top:4px;accent-color:var(--acc)}
+.q{margin:18px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q p.t{font-weight:600}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:16px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;cursor:pointer}
+.opt:hover{border-color:var(--acc)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.why{font-size:16px;color:var(--mute);display:none;margin-top:4px}
+button.main{font:600 16px "Bricolage Grotesque",sans-serif;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Days 3 to 5: Variables, data types and operators</h1>
+<p class="sub">Sprint 1 · Sep 16 to Sep 18 · about 2.5 hours per day · Java</p>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<p class="sub" id="barTxt">0 checklist items done</p>
+<h2>Plan</h2>
+<p class="sub">All videos are free on YouTube and open in a new tab. Each link is a search, so pick any recent beginner video with good views and a clear voice.</p>
+<div class="card" id="plan">
+<h3>Day 3 (Wed): primitive types and type casting</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 1: the 8 primitive types, size and range, run the lab</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 2: implicit and explicit casting, predict the outputs first</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Quiz questions 1 to 5</span></label>
+<h3>Day 4 (Thu): operators and Scanner</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 3: arithmetic, relational, logical and bitwise on the same two numbers</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 4: Scanner and the nextInt / nextLine pitfall</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Quiz questions 6 to 10</span></label>
+<h3>Day 5 (Fri): programs, LeetCode and GitHub</h3>
+<label class="chk"><input type="checkbox"><span><span class="time">60 min</span> Part 5: write the 5 small programs</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">50 min</span> Part 6: LeetCode Two Sum and Reverse Array</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">20 min</span> Part 7: push every program to GitHub with real commits</span></label>
+<label class="chk"><input type="checkbox"><span><span class="time">15 min</span> Quiz questions 11 to 16</span></label>
+</div>
+
+<h2 style="margin-top:36px">DAY 3 · Wednesday</h2>
+<h2>Part 1. Primitive types</h2>
+<p>A variable is a named box in memory. Its <b>type</b> decides how big the box is and what can go inside. Java has 8 primitive types. Today's six are in bold.</p>
+<div class="wrap"><table>
+<tr><th>Type</th><th>Size</th><th>Range or detail</th><th>Use it for</th></tr>
+<tr><td><b>int</b></td><td>4 bytes</td><td>-2,147,483,648 to 2,147,483,647 (about 2.1 billion)</td><td>Default whole numbers</td></tr>
+<tr><td><b>long</b></td><td>8 bytes</td><td>About -9.2 quintillion to 9.2 quintillion</td><td>Whole numbers above 2.1 billion</td></tr>
+<tr><td><b>float</b></td><td>4 bytes</td><td>About 7 digits of precision</td><td>Decimals when memory matters</td></tr>
+<tr><td><b>double</b></td><td>8 bytes</td><td>About 15 digits of precision</td><td>Default decimals</td></tr>
+<tr><td><b>char</b></td><td>2 bytes</td><td>One character, single quotes</td><td><code>'A'</code>, <code>'7'</code></td></tr>
+<tr><td><b>boolean</b></td><td>about 1 bit of information</td><td><code>true</code> or <code>false</code></td><td>Conditions</td></tr>
+<tr><td>byte, short</td><td>1, 2 bytes</td><td>-128 to 127, and -32,768 to 32,767</td><td>Small numbers, arrays of raw data</td></tr>
+</table></div>
+<div class="tip"><b>How to choose:</b> whole number gives <code>int</code>, unless it could pass 2.1 billion (phone numbers, population, money in paise), then <code>long</code>. Decimal gives <code>double</code>. Yes or no gives <code>boolean</code>.</div>
+<h3>Three beginner traps</h3>
+<ul>
+<li><code>long big = 3000000000L;</code> needs the <b>L</b>, otherwise Java treats the number as int and refuses it.</li>
+<li><code>float f = 3.14f;</code> needs the <b>f</b>, because decimal literals are double by default.</li>
+<li><code>0.1 + 0.2</code> is not exactly <code>0.3</code> in double. Computers store binary approximations.</li>
+</ul>
+<h3>Lab: Types.java</h3>
+<pre><code>public class Types {
+    public static void main(String[] args) {
+        int age = 21;
+        long population = 8000000000L;
+        float price = 99.99f;
+        double pi = 3.141592653589793;
+        char grade = 'A';
+        boolean passed = true;
+
+        System.out.println(age + " " + population);
+        System.out.println(price + " " + pi);
+        System.out.println(grade + " " + passed);
+
+        System.out.println(Integer.MAX_VALUE);       // 2147483647
+        System.out.println(Integer.MAX_VALUE + 1);   // overflow: -2147483648
+        System.out.println(Long.MAX_VALUE);
+        System.out.println(0.1 + 0.2);               // 0.30000000000000004
+    }
+}</code></pre>
+<p>Predict the last 4 lines before running. The overflow line is the one to remember: <code>int</code> wraps around instead of crashing.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+primitive+data+types+int+long+float+double+char+boolean+beginners">
+<b>Video: Java primitive data types explained</b>
+<span>Watch first. Look for one that shows the size and range table.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+variables+and+data+types+tutorial+for+beginners">
+<b>Video: Variables and data types in Java</b>
+<span>Good second pass if the first one felt fast.</span></a>
+
+<h2>Part 2. Type casting: implicit vs explicit</h2>
+<h3>Implicit (widening): automatic and safe</h3>
+<p>A smaller type fits into a bigger one, so Java converts it for you. Order: <code>byte → short → int → long → float → double</code>.</p>
+<pre><code>int i = 10;
+double d = i;        // 10.0, automatic
+long l = i;          // fine</code></pre>
+<h3>Explicit (narrowing): you force it and can lose data</h3>
+<p>A bigger value going into a smaller box needs <code>(type)value</code>. Java makes you write it so you know data may be lost.</p>
+<pre><code>double price = 9.99;
+// int x = price;        // compile error: possible lossy conversion
+int x = (int) price;     // 9, decimals are cut off, NOT rounded
+byte b = (byte) 130;     // -126, value wraps around</code></pre>
+<h3>char and int</h3>
+<p>Every char is a number (Unicode). <code>'A'</code> is 65, <code>'B'</code> is 66, <code>'a'</code> is 97, <code>'0'</code> is 48.</p>
+<pre><code>int code = 'A';              // 65
+char c = (char) 66;          // 'B'
+char next = (char) ('A' + 1);// 'B'
+System.out.println('A' + 1);        // 66 (math, so int)
+System.out.println("" + 'A' + 1);   // A1 (string joining)</code></pre>
+<h3>Predict the output before running</h3>
+<pre><code>System.out.println(7 / 2);
+System.out.println(7 / 2.0);
+System.out.println((double) 7 / 2);
+System.out.println((double) (7 / 2));
+System.out.println((int) 3.99);
+System.out.println((int) -3.99);
+System.out.println('A' + 'B');
+System.out.println((char) ('a' + 2));</code></pre>
+<details><summary>Show the answers</summary><pre><code>3        // int divided by int stays int
+3.5      // one side is double
+3.5      // cast happens first, then divide
+3.0      // divide first (3), then cast
+3        // cut off, not rounded
+-3       // cut toward zero
+131      // 65 + 66
+c</code></pre>
+</details>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+type+casting+implicit+explicit+widening+narrowing+beginners">
+<b>Video: Type casting in Java</b>
+<span>Look for one that shows (int) 9.99 and char to int.</span></a>
+
+<h2 style="margin-top:56px">DAY 4 · Thursday</h2>
+<h2>Part 3. Operators</h2>
+<p>Your task: one small program that uses all four categories on the <b>same two numbers</b>. We use <code>a = 12</code> and <code>b = 10</code>.</p>
+<h3>The four categories</h3>
+<div class="wrap"><table>
+<tr><th>Category</th><th>Operators</th><th>Result type</th></tr>
+<tr><td>Arithmetic</td><td><code>+ - * / %</code> (also <code>++ --</code>)</td><td>A number</td></tr>
+<tr><td>Relational</td><td><code>== != &gt; &lt; &gt;= &lt;=</code></td><td>boolean</td></tr>
+<tr><td>Logical</td><td><code>&amp;&amp; || !</code></td><td>boolean</td></tr>
+<tr><td>Bitwise</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td>A number, works on the bits</td></tr>
+</table></div>
+<p><code>%</code> is the remainder: <code>17 % 5</code> is 2. Use it for even or odd checks (<code>n % 2 == 0</code>).</p>
+<p><code>&amp;&amp;</code> and <code>||</code> <b>short-circuit</b>: if the left side already decides the answer, the right side is not even evaluated. The single <code>&amp;</code> and <code>|</code> on booleans always evaluate both sides.</p>
+<h3>How bitwise works, with a = 12 and b = 10</h3>
+<pre><code>a = 12 = 1100
+b = 10 = 1010
+
+a &amp; b  = 1000 = 8     (1 only where both are 1)
+a | b  = 1110 = 14    (1 where either is 1)
+a ^ b  = 0110 = 6     (1 where they differ)
+~a     = -13          (flips all bits: -(a+1))
+a &lt;&lt; 1 = 11000 = 24   (shift left = multiply by 2)
+a &gt;&gt; 1 = 110 = 6      (shift right = divide by 2)</code></pre>
+<h3>Lab: Operators.java</h3>
+<pre><code>public class Operators {
+    public static void main(String[] args) {
+        int a = 12, b = 10;
+
+        System.out.println("--- Arithmetic ---");
+        System.out.println(a + b);   // 22
+        System.out.println(a - b);   // 2
+        System.out.println(a * b);   // 120
+        System.out.println(a / b);   // 1
+        System.out.println(a % b);   // 2
+
+        System.out.println("--- Relational ---");
+        System.out.println(a == b);  // false
+        System.out.println(a != b);  // true
+        System.out.println(a &gt; b);   // true
+        System.out.println(a &lt; b);   // false
+
+        System.out.println("--- Logical ---");
+        System.out.println(a &gt; 5 &amp;&amp; b &gt; 5);    // true
+        System.out.println(a &gt; 20 || b &gt; 5);   // true
+        System.out.println(!(a &gt; b));          // false
+
+        System.out.println("--- Bitwise ---");
+        System.out.println(a &amp; b);   // 8
+        System.out.println(a | b);   // 14
+        System.out.println(a ^ b);   // 6
+        System.out.println(~a);      // -13
+        System.out.println(a &lt;&lt; 1);  // 24
+        System.out.println(a &gt;&gt; 1);  // 6
+    }
+}</code></pre>
+<p><b>Extra:</b> change a and b to other numbers, predict every line, then run. Try <code>a++</code> vs <code>++a</code> inside a println to see the difference between post and pre increment.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+operators+arithmetic+relational+logical+beginners+tutorial">
+<b>Video: Java operators tutorial</b>
+<span>Look for one covering all categories.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+bitwise+operators+and+or+xor+shift+explained">
+<b>Video: Bitwise operators in Java</b>
+<span>Pause when the bits are drawn and match them with the table above.</span></a>
+
+<h2>Part 4. Input and output: Scanner</h2>
+<h3>Output</h3>
+<pre><code>System.out.println("Hello");     // prints and moves to the next line
+System.out.print("Hello ");      // prints and stays on the same line
+System.out.printf("%.2f%n", 3.14159);   // 3.14, formatted</code></pre>
+<h3>Input</h3>
+<pre><code>import java.util.Scanner;
+
+public class Input {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter age: ");
+        int age = sc.nextInt();
+        System.out.print("Enter marks: ");
+        double marks = sc.nextDouble();
+        System.out.println(age + " " + marks);
+        sc.close();
+    }
+}</code></pre>
+<div class="wrap"><table>
+<tr><th>Method</th><th>Reads</th></tr>
+<tr><td><code>nextInt()</code></td><td>One whole number</td></tr>
+<tr><td><code>nextDouble()</code></td><td>One decimal number</td></tr>
+<tr><td><code>next()</code></td><td>One word (stops at a space)</td></tr>
+<tr><td><code>nextLine()</code></td><td>A full line, up to Enter</td></tr>
+<tr><td><code>nextBoolean()</code></td><td>true or false</td></tr>
+</table></div>
+<h3>The famous pitfall: nextInt() then nextLine()</h3>
+<pre><code>System.out.print("Age: ");
+int age = sc.nextInt();
+System.out.print("Name: ");
+String name = sc.nextLine();   // SKIPPED, name is empty</code></pre>
+<p><b>Why it happens:</b> you type <code>21</code> and press Enter, so the input is really <code>21↵</code>. <code>nextInt()</code> takes the 21 but leaves the Enter (the newline) in the buffer. Then <code>nextLine()</code> reads from where it is up to the next Enter, finds it immediately, and returns an empty string. It looks skipped, but it actually read the leftover Enter.</p>
+<h3>Two fixes</h3>
+<pre><code>// Fix 1: eat the leftover newline
+int age = sc.nextInt();
+sc.nextLine();                    // throw away the rest of that line
+String name = sc.nextLine();      // now works
+
+// Fix 2: always read lines, then convert
+int age2 = Integer.parseInt(sc.nextLine());
+String name2 = sc.nextLine();</code></pre>
+<p>Also know: typing letters into <code>nextInt()</code> throws <code>InputMismatchException</code>.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+scanner+class+nextInt+nextLine+user+input+tutorial">
+<b>Video: Scanner class in Java</b>
+<span>Watch the whole video, it is usually short.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+scanner+nextline+skipped+after+nextint+fix">
+<b>Video: Scanner nextLine skipping problem</b>
+<span>Directly explains the pitfall and fix in your plan.</span></a>
+
+<h2 style="margin-top:56px">DAY 5 · Friday</h2>
+<h2>Part 5. Write 5 small programs</h2>
+<p>Type each one yourself, save it as its own file, and run it. Open the solution only after you try. Each program is one commit on GitHub (Part 7).</p>
+<h3>1. Area of a circle</h3>
+<details><summary>Show a solution</summary><pre><code>import java.util.Scanner;
+
+public class CircleArea {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Radius: ");
+        double r = sc.nextDouble();
+        double area = Math.PI * r * r;
+        System.out.printf("Area = %.2f%n", area);
+    }
+}</code></pre>
+</details>
+<h3>2. Swap two numbers: with and without a temp variable</h3>
+<details><summary>Show a solution</summary><pre><code>public class Swap {
+    public static void main(String[] args) {
+        int a = 5, b = 9;
+
+        // With a temp variable
+        int temp = a;
+        a = b;
+        b = temp;
+        System.out.println(a + " " + b);   // 9 5
+
+        // Without temp (using + and -)
+        a = a + b;     // 14
+        b = a - b;     // 9
+        a = a - b;     // 5
+        System.out.println(a + " " + b);   // 5 9
+
+        // Without temp (using XOR)
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+        System.out.println(a + " " + b);   // 9 5
+    }
+}</code></pre>
+</details>
+<p>The + and - trick can overflow for huge ints. The XOR trick cannot. The temp variable version is the clearest and is what real code uses.</p>
+<h3>3. Calculator with switch</h3>
+<details><summary>Show a solution</summary><pre><code>import java.util.Scanner;
+
+public class Calculator {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter two numbers: ");
+        double x = sc.nextDouble();
+        double y = sc.nextDouble();
+        System.out.print("Operator (+ - * /): ");
+        char op = sc.next().charAt(0);
+
+        switch (op) {
+            case '+': System.out.println(x + y); break;
+            case '-': System.out.println(x - y); break;
+            case '*': System.out.println(x * y); break;
+            case '/':
+                if (y == 0) System.out.println("Cannot divide by zero");
+                else System.out.println(x / y);
+                break;
+            default: System.out.println("Invalid operator");
+        }
+    }
+}</code></pre>
+</details>
+<p>Without <code>break</code>, Java keeps running into the next case (fall-through). Forgetting it is the number one switch bug.</p>
+<h3>4. Temperature converter</h3>
+<details><summary>Show a solution</summary><pre><code>import java.util.Scanner;
+
+public class Temperature {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Celsius: ");
+        double c = sc.nextDouble();
+        double f = c * 9.0 / 5 + 32;     // 9.0, NOT 9/5 (that is 1)
+        System.out.printf("%.1f C = %.1f F%n", c, f);
+
+        System.out.print("Fahrenheit: ");
+        double f2 = sc.nextDouble();
+        double c2 = (f2 - 32) * 5.0 / 9;
+        System.out.printf("%.1f F = %.1f C%n", f2, c2);
+    }
+}</code></pre>
+</details>
+<p>Test: 100 C should give 212 F, and 32 F should give 0 C. If you write <code>9 / 5</code> with two ints you get 1 and the answer is wrong. That is Day 3 integer division showing up again.</p>
+<h3>5. Simple interest</h3>
+<details><summary>Show a solution</summary><pre><code>import java.util.Scanner;
+
+public class SimpleInterest {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Principal, rate (%), time (years): ");
+        double p = sc.nextDouble();
+        double r = sc.nextDouble();
+        double t = sc.nextDouble();
+        double si = p * r * t / 100;
+        System.out.printf("Interest = %.2f, Total = %.2f%n", si, p + si);
+    }
+}</code></pre>
+</details>
+<p>Test: 1000, 5, 2 gives interest 100.00 and total 1100.00.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+switch+case+break+default+tutorial+beginners">
+<b>Video: Java switch statement</b>
+<span>Needed for the calculator.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=java+beginner+programs+swap+two+numbers+without+temp+area+of+circle">
+<b>Video: Simple Java programs for beginners</b>
+<span>Compare with your versions after trying.</span></a>
+
+<h2>Part 6. LeetCode: Two Sum and Reverse Array</h2>
+<h3>Two Sum (LC 1, Easy)</h3>
+<p>Given an array and a target, return the indexes of the two numbers that add up to the target. Example: <code>[2, 7, 11, 15]</code>, target 9 gives <code>[0, 1]</code>.</p>
+<p><b>Step 1: brute force, O(n&sup2;).</b> Try every pair.</p>
+<pre><code>public int[] twoSum(int[] nums, int target) {
+    for (int i = 0; i &lt; nums.length; i++) {
+        for (int j = i + 1; j &lt; nums.length; j++) {
+            if (nums[i] + nums[j] == target) {
+                return new int[]{i, j};
+            }
+        }
+    }
+    return new int[]{};
+}</code></pre>
+<p><b>Step 2: HashMap, O(n).</b> For each number, the partner you need is <code>target - num</code>. Keep a map of numbers you have already seen with their index. If the partner is in the map, you are done. One pass, and each lookup is fast.</p>
+<pre><code>import java.util.*;
+
+public int[] twoSum(int[] nums, int target) {
+    Map&lt;Integer, Integer&gt; seen = new HashMap&lt;&gt;();   // value -&gt; index
+    for (int i = 0; i &lt; nums.length; i++) {
+        int need = target - nums[i];
+        if (seen.containsKey(need)) {
+            return new int[]{seen.get(need), i};
+        }
+        seen.put(nums[i], i);
+    }
+    return new int[]{};
+}</code></pre>
+<p>Trace it on <code>[2, 7, 11, 15]</code>, target 9: at 2, need 7, map empty, store 2. At 7, need 2, found at index 0, return <code>[0, 1]</code>.</p>
+<h3>Reverse Array: two-pointer swap in place</h3>
+<p>Put one pointer at the start and one at the end. Swap, move both inward, stop when they meet. No second array needed, so extra memory is O(1).</p>
+<pre><code>public static void reverse(int[] arr) {
+    int left = 0, right = arr.length - 1;
+    while (left &lt; right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left++;
+        right--;
+    }
+}
+// [1, 2, 3, 4, 5]  -&gt;  [5, 4, 3, 2, 1]</code></pre>
+<p>After you can do it by hand, try LeetCode 344 Reverse String, which is the same idea on a char array.</p>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=leetcode+two+sum+java+hashmap+solution+explained">
+<b>Video: Two Sum LeetCode solution (brute force to HashMap)</b>
+<span>Try the brute force on your own first.</span></a>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=reverse+array+in+place+java+two+pointer+explained">
+<b>Video: Reverse an array in Java with two pointers</b>
+<span>Short and fits your plan exactly.</span></a>
+
+<h2>Part 7. Push every program to GitHub</h2>
+<p>Your plan says one commit per topic, with real messages. A commit history is a diary of your learning, and recruiters read it.</p>
+<h3>Folder idea</h3>
+<pre><code>Java-Learning/
+  sprint1/
+    day3/Types.java
+    day3/Casting.java
+    day4/Operators.java
+    day4/Input.java
+    day5/CircleArea.java
+    day5/Swap.java
+    day5/Calculator.java
+    day5/Temperature.java
+    day5/SimpleInterest.java
+  .gitignore</code></pre>
+<h3>Commands for each topic</h3>
+<pre><code>git add sprint1/day3/Casting.java
+git commit -m "Add type casting examples"
+git add sprint1/day4/Operators.java
+git commit -m "Add operators demo using all four categories"
+git push origin main</code></pre>
+<p>Add a <code>.gitignore</code> with <code>*.class</code> so compiled files do not get uploaded. Your default branch may be <code>main</code> or <code>master</code>, so check with <code>git branch</code>.</p>
+<div class="wrap"><table>
+<tr><th>Bad message</th><th>Good message</th></tr>
+<tr><td>update</td><td>Add type casting examples</td></tr>
+<tr><td>new file</td><td>Add calculator program using switch</td></tr>
+<tr><td>changes</td><td>Fix temperature converter integer division bug</td></tr>
+</table></div>
+<a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=git+and+github+for+beginners+add+commit+push+tutorial">
+<b>Video: Git and GitHub for beginners: add, commit, push</b>
+<span>Only needed if you have not pushed before.</span></a>
+
+<h2>Quiz: 16 questions across all three days</h2>
+<div id="quiz"></div>
+<p><button class="main" id="reset">Reset quiz</button> <span id="score" class="sub"></span></p>
+<h2>Finish line</h2>
+<div class="card"><p>You are done when you can, without looking:</p><ul>
+<li>Pick the right primitive type for a value, and add L or f when needed.</li>
+<li>Predict casting outputs like <code>7 / 2</code>, <code>(int) 3.99</code> and <code>'A' + 1</code>.</li>
+<li>Explain why <code>nextLine()</code> looks skipped after <code>nextInt()</code>, and fix it two ways.</li>
+<li>Show your 5 programs, 2 LeetCode solutions and one commit per topic on GitHub.</li></ul></div>
+</main>
+<script>
+var Q=[
+["Which type should hold the value 5,000,000,000?",["int","long","float","char"],1,"int tops out near 2.1 billion. Write 5000000000L."],
+["What happens with int x = 3.7; ?",["x is 3","x is 4","Compile error: lossy conversion","x is 3.7"],2,"Narrowing needs an explicit cast: (int) 3.7."],
+["What does (int) 9.99 give?",["10","9","9.99","Error"],1,"Casting cuts the decimals, it does not round."],
+["What does 7 / 2 print in Java?",["3.5","3","4","3.0"],1,"int divided by int stays an int."],
+["Why does float f = 3.14; fail?",["float cannot hold decimals","3.14 is a double, needs 3.14f","Missing import","Variable name"],1,"Decimal literals are double unless you add f."],
+["What is 17 % 5?",["3","2","12","3.4"],1,"% gives the remainder: 17 = 3 x 5 + 2."],
+["With a = 12 and b = 10, what is a & b?",["22","8","14","6"],1,"1100 and 1010 share a 1 only in the 8s place."],
+["What does && do when the left side is false?",["Evaluates both sides","Skips the right side (short-circuit)","Throws an error","Returns true"],1,"The result is already false, so the right side is not evaluated."],
+["After sc.nextInt(), why does sc.nextLine() return an empty string?",["Scanner is broken","The Enter key is left in the input buffer","nextInt closes the scanner","nextLine needs a number"],1,"nextInt leaves the newline, and nextLine reads it as an empty line."],
+["With a = 12, what is a << 1?",["6","24","13","11"],1,"Shifting left by 1 multiplies by 2."],
+["In a switch, what stops execution falling into the next case?",["continue","break","stop","exit"],1,"Without break, Java keeps running the following cases."],
+["double f = c * (9 / 5) + 32 with c = 100. What is f?",["212.0","132.0","180.0","Error"],1,"9 / 5 is 1 in int math, so the result is 100 + 32."],
+["What is the time complexity of brute force Two Sum?",["O(1)","O(n)","O(n squared)","O(log n)"],2,"Two nested loops over all pairs."],
+["Why does the HashMap Two Sum run in O(n)?",["It sorts first","One pass, each lookup is fast","It uses recursion","It uses two arrays"],1,"Each number is checked once, with a quick map lookup."],
+["How does an in-place array reversal work?",["Copy to a new array","Swap from both ends moving inward","Sort descending","Use a HashMap"],1,"Two pointers swap and move toward each other."],
+["Which is the best commit message?",["update","new file","Add type casting examples","changes"],2,"A good message says what changed and why in plain words."]
+];
+var quiz=document.getElementById("quiz"),done=0,right=0;
+function build(){
+quiz.innerHTML="";done=0;right=0;document.getElementById("score").textContent="";
+Q.forEach(function(q,i){
+var d=document.createElement("div");d.className="q";
+var t=document.createElement("p");t.className="t";t.textContent=(i+1)+". "+q[0];d.appendChild(t);
+var w=document.createElement("p");w.className="why";
+q[1].forEach(function(o,j){
+var b=document.createElement("button");b.className="opt";b.textContent=o;
+b.onclick=function(){
+if(d.dataset.a)return;d.dataset.a=1;done++;
+var bs=d.querySelectorAll(".opt");
+bs[q[2]].classList.add("right");
+if(j===q[2])right++;else b.classList.add("wrong");
+w.textContent=q[3];w.style.display="block";
+if(done===Q.length)document.getElementById("score").textContent="Score: "+right+" / "+Q.length+(right===Q.length?" Perfect.":" Review the parts you missed.");
+};
+d.appendChild(b);
+});
+d.appendChild(w);quiz.appendChild(d);
+});}
+build();
+document.getElementById("reset").onclick=build;
+var boxes=document.querySelectorAll("#plan input"),key="sprint1-days3-5-plan";
+function upd(){
+var n=0;boxes.forEach(function(b){if(b.checked)n++});
+document.getElementById("bar").style.width=(n/boxes.length*100)+"%";
+document.getElementById("barTxt").textContent=n+" of "+boxes.length+" checklist items done";
+try{localStorage.setItem(key,JSON.stringify(Array.from(boxes).map(function(b){return b.checked})))}catch(e){}
+}
+try{var s=JSON.parse(localStorage.getItem(key)||"null");if(s)boxes.forEach(function(b,i){b.checked=!!s[i]})}catch(e){}
+boxes.forEach(function(b){b.addEventListener("change",upd)});
+upd();
+</script>
+</body>
+</html>
